@@ -3,8 +3,9 @@ package com.example.smsexpensetracker;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,6 +28,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper    dbHelper;
     private List<Transaction> transactionList = new ArrayList<>();
+
+    /** Single-thread pool for SMS import tasks — avoids deprecated AsyncTask. */
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    /** Posts results back to the main (UI) thread. */
+    private final Handler         mainHandler = new Handler(Looper.getMainLooper());
 
     // -------------------------------------------------------
     // Lifecycle
@@ -94,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         if (fabRescan != null) {
             fabRescan.setOnClickListener(v -> {
                 if (hasAllPermissions()) {
-                    new ImportSMSTask().execute();
+                    importSMSInBackground();
                 } else {
                     ActivityCompat.requestPermissions(
                             this,
@@ -164,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (adView != null) adView.destroy();
+        executor.shutdownNow();   // clean up thread pool
         super.onDestroy();
     }
 
@@ -207,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         if (!done) {
             // First install — scan full inbox to import history
             prefs.edit().putBoolean(PREF_FIRST_LAUNCH, true).apply();
-            new ImportSMSTask().execute();
+            importSMSInBackground();
         } else {
             // All subsequent launches — just load from DB instantly
             // New SMS are already saved by SMSReceiver in background
@@ -313,41 +322,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // -------------------------------------------------------
-    // AsyncTask — background full SMS import (first launch only)
+    // Background SMS import using ExecutorService + Handler
+    // Replaces the deprecated AsyncTask pattern.
     // -------------------------------------------------------
 
-    private class ImportSMSTask extends AsyncTask<Void, Void, Integer> {
+    /**
+     * Runs the full SMS inbox scan on a background thread (via ExecutorService),
+     * then posts the result back to the main thread via Handler.
+     * This replaces the deprecated {@link android.os.AsyncTask}.
+     */
+    private void importSMSInBackground() {
+        // --- pre-execute: show progress on UI thread ---
+        if (layoutProgress != null)    layoutProgress.setVisibility(View.VISIBLE);
+        if (fabRescan != null)         fabRescan.setEnabled(false);
+        if (fabAddTransaction != null) fabAddTransaction.setEnabled(false);
+        if (layoutEmpty != null)       layoutEmpty.setVisibility(View.GONE);
 
-        @Override
-        protected void onPreExecute() {
-            if (layoutProgress != null)    layoutProgress.setVisibility(View.VISIBLE);
-            if (fabRescan != null)         fabRescan.setEnabled(false);
-            if (fabAddTransaction != null) fabAddTransaction.setEnabled(false);
-            if (layoutEmpty != null)       layoutEmpty.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
+        executor.execute(() -> {
+            // --- background work ---
+            int newRows = 0;
             try {
                 List<Transaction> parsed =
                         SMSReader.readBankingTransactions(MainActivity.this);
-                return dbHelper.insertTransactions(parsed);
+                newRows = dbHelper.insertTransactions(parsed);
             } catch (Exception e) {
-                Log.e(TAG, "ImportSMSTask error: " + e.getMessage(), e);
-                return 0;
+                Log.e(TAG, "importSMSInBackground error: " + e.getMessage(), e);
             }
-        }
 
-        @Override
-        protected void onPostExecute(Integer newRows) {
-            if (layoutProgress != null)    layoutProgress.setVisibility(View.GONE);
-            if (fabRescan != null)         fabRescan.setEnabled(true);
-            if (fabAddTransaction != null) fabAddTransaction.setEnabled(true);
-            loadFromDatabase();
-            String msg = newRows > 0
-                    ? newRows + " new transaction(s) imported!"
-                    : "No new transactions found.";
-            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
-        }
+            final int result = newRows;
+
+            // --- post-execute: update UI on main thread ---
+            mainHandler.post(() -> {
+                if (layoutProgress != null)    layoutProgress.setVisibility(View.GONE);
+                if (fabRescan != null)         fabRescan.setEnabled(true);
+                if (fabAddTransaction != null) fabAddTransaction.setEnabled(true);
+                loadFromDatabase();
+                String msg = result > 0
+                        ? result + " new transaction(s) imported!"
+                        : "No new transactions found.";
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+            });
+        });
     }
 }

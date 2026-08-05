@@ -1,26 +1,26 @@
 [
     {
-        "merged": "com.example.smsexpensetracker.app-debug-4:/drawable_ic_launcher.png.flat",
-        "source": "com.example.smsexpensetracker.app-main-6:/drawable/ic_launcher.png"
+        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_activity_main.xml.flat",
+        "source": "com.example.smsexpensetracker.app-main-44:/layout/activity_main.xml"
     },
     {
-        "merged": "com.example.smsexpensetracker.app-debug-4:/layout_item_transaction.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-6:/layout/item_transaction.xml"
+        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_item_transaction.xml.flat",
+        "source": "com.example.smsexpensetracker.app-main-44:/layout/item_transaction.xml"
     },
     {
-        "merged": "com.example.smsexpensetracker.app-debug-4:/layout_dialog_transaction.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-6:/layout/dialog_transaction.xml"
+        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_dialog_add_transaction.xml.flat",
+        "source": "com.example.smsexpensetracker.app-main-44:/layout/dialog_add_transaction.xml"
     },
     {
-        "merged": "com.example.smsexpensetracker.app-debug-4:/layout_activity_main.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-6:/layout/activity_main.xml"
+        "merged": "com.example.smsexpensetracker.app-debug-42:/drawable_ic_launcher.png.flat",
+        "source": "com.example.smsexpensetracker.app-main-44:/drawable/ic_launcher.png"
     },
     {
-        "merged": "com.example.smsexpensetracker.app-debug-4:/drawable_bg_dialog_rounded.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-6:/drawable/bg_dialog_rounded.xml"
+        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_dialog_transaction.xml.flat",
+        "source": "com.example.smsexpensetracker.app-main-44:/layout/dialog_transaction.xml"
     },
     {
-        "merged": "com.example.smsexpensetracker.app-debug-4:/layout_dialog_add_transaction.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-6:/layout/dialog_add_transaction.xml"
+        "merged": "com.example.smsexpensetracker.app-debug-42:/drawable_bg_dialog_rounded.xml.flat",
+        "source": "com.example.smsexpensetracker.app-main-44:/drawable/bg_dialog_rounded.xml"
     }
 ]

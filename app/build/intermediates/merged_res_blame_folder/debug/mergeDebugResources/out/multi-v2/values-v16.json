@@ -1,20 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.smsexpensetracker.app-mergeDebugResources-2:/values-v16/values-v16.xml",
+            "outputFile": "com.example.smsexpensetracker.app-mergeDebugResources-40:/values-v16/values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\gaura\\.gradle\\caches\\9.0-milestone-1\\transforms\\1b464219331fa84f75b241c4e1af3ade\\transformed\\core-1.9.0\\res\\values-v16\\values-v16.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "65",
-                        "endOffsets": "116"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\gaura\\.gradle\\caches\\9.0-milestone-1\\transforms\\53d03f74fecc451e722f509e370803bf\\transformed\\appcompat-1.6.1\\res\\values-v16\\values-v16.xml",
+                    "source": "/home/gaurang/.gradle/caches/8.9/transforms/2e5dede616097980bb091ccafda52a7d/transformed/appcompat-1.7.0/res/values-v16/values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -22,14 +12,6 @@
                         "endLines": "5",
                         "endColumns": "12",
                         "endOffsets": "223"
-                    },
-                    "to": {
-                        "startLines": "3",
-                        "startColumns": "4",
-                        "startOffsets": "121",
-                        "endLines": "6",
-                        "endColumns": "12",
-                        "endOffsets": "289"
                     }
                 }
             ]

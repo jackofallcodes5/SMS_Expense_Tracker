@@ -1,3 +1,0 @@
-com.example.smsexpensetracker.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme

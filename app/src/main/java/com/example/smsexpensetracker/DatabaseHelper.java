@@ -86,7 +86,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
-            db.close();
         }
         Log.d(TAG, "Bulk insert: " + count + " new rows.");
         return count;
@@ -102,7 +101,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues cv = buildContentValues(t);
         long rowId = db.insertWithOnConflict(TABLE_TRANSACTIONS, null, cv,
                 SQLiteDatabase.CONFLICT_IGNORE);
-        db.close();
         if (rowId != -1) {
             Log.d(TAG, "Single insert success: " + t);
         } else {
@@ -136,7 +134,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
-        db.close();
         return list;
     }
 
@@ -153,7 +150,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             count = cursor.getInt(0);
             cursor.close();
         }
-        db.close();
         return count;
     }
 
@@ -171,7 +167,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL_DESCRIPTION, newDescription);
         int rows = db.update(TABLE_TRANSACTIONS, cv,
                 COL_ID + " = ?", new String[]{String.valueOf(transactionId)});
-        db.close();
         return rows;
     }
 
