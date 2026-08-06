@@ -3281,10 +3281,14 @@ int id browser_actions_menu_items 0x7f08006b
 int id browser_actions_menu_view 0x7f08006c
 int id btnAddCancel 0x7f08006d
 int id btnAddSave 0x7f08006e
+int id btnCancelExpense 0x7f08022a
 int id btnClose 0x7f08006f
+int id btnExpenses 0x7f080228
 int id btnPickDate 0x7f080070
 int id btnPickTime 0x7f080071
 int id btnSave 0x7f080072
+int id btnSaveExpense 0x7f08022b
+int id btnTransactions 0x7f080229
 int id buttonPanel 0x7f080073
 int id cache_measures 0x7f080074
 int id callMeasure 0x7f080075
@@ -3372,11 +3376,14 @@ int id etAddDescription 0x7f0800c6
 int id etAmount 0x7f0800c7
 int id etDate 0x7f0800c8
 int id etDialogDescription 0x7f0800c9
+int id etExpenseBudget 0x7f08022c
+int id etExpenseName 0x7f08022d
 int id etParty 0x7f0800ca
 int id etTime 0x7f0800cb
 int id exitUntilCollapsed 0x7f0800cc
 int id expand_activities_button 0x7f0800cd
 int id expanded_menu 0x7f0800ce
+int id fabAddExpense 0x7f08022e
 int id fabAddTransaction 0x7f0800cf
 int id fabRescan 0x7f0800d0
 int id fade 0x7f0800d1
@@ -3432,6 +3439,7 @@ int id jumpToEnd 0x7f080102
 int id jumpToStart 0x7f080103
 int id labeled 0x7f080104
 int id layout 0x7f080105
+int id layoutEmptyExpense 0x7f08022f
 int id left 0x7f080106
 int id leftToRight 0x7f080107
 int id legacy 0x7f080108
@@ -3559,6 +3567,7 @@ int id position 0x7f080181
 int id postLayout 0x7f080182
 int id pressed 0x7f080183
 int id progressBar 0x7f080184
+int id progressExpense 0x7f080230
 int id progress_circular 0x7f080185
 int id progress_horizontal 0x7f080186
 int id radio 0x7f080187
@@ -3566,6 +3575,7 @@ int id ratio 0x7f080188
 int id rbCredit 0x7f080189
 int id rbDebit 0x7f08018a
 int id rectangles 0x7f08018b
+int id recyclerExpense 0x7f080231
 int id recyclerView 0x7f08018c
 int id report_drawn 0x7f08018d
 int id reverseSawtooth 0x7f08018e
@@ -3616,6 +3626,7 @@ int id snapMargins 0x7f0801ba
 int id south 0x7f0801bb
 int id spacer 0x7f0801bc
 int id special_effects_controller_view_tag 0x7f0801bd
+int id spinnerExpense 0x7f080232
 int id spline 0x7f0801be
 int id split_action_bar 0x7f0801bf
 int id spread 0x7f0801c0
@@ -3673,6 +3684,7 @@ int id titleDividerNoCustom 0x7f0801f3
 int id title_template 0x7f0801f4
 int id toggle 0x7f0801f5
 int id toolbar 0x7f0801f6
+int id toolbarExpenses 0x7f080233
 int id top 0x7f0801f7
 int id topPanel 0x7f0801f8
 int id touch_outside 0x7f0801f9
@@ -3688,6 +3700,7 @@ int id transition_scene_layoutid_cache 0x7f080202
 int id transition_transform 0x7f080203
 int id triangle 0x7f080204
 int id tvAmount 0x7f080205
+int id tvBudget 0x7f080234
 int id tvDateTime 0x7f080206
 int id tvDialogAmount 0x7f080207
 int id tvDialogDatetime 0x7f080208
@@ -3695,7 +3708,13 @@ int id tvDialogParty 0x7f080209
 int id tvDialogReference 0x7f08020a
 int id tvDialogType 0x7f08020b
 int id tvEmptyState 0x7f08020c
+int id tvExpenseLabel 0x7f080235
+int id tvExpenseName 0x7f080236
+int id tvRemaining 0x7f080237
+int id tvSpent 0x7f080238
 int id tvSummary 0x7f08020d
+int id tvTotalBudget 0x7f080239
+int id tvTotalSpent 0x7f08023a
 int id tvType 0x7f08020e
 int id unchecked 0x7f08020f
 int id uniform 0x7f080210
@@ -3837,6 +3856,7 @@ int layout abc_search_dropdown_item_icons_2line 0x7f0b0018
 int layout abc_search_view 0x7f0b0019
 int layout abc_select_dialog_material 0x7f0b001a
 int layout abc_tooltip 0x7f0b001b
+int layout activity_expenses 0x7f0b0073
 int layout activity_main 0x7f0b001c
 int layout admob_empty_layout 0x7f0b001d
 int layout browser_actions_context_menu_page 0x7f0b001e
@@ -3857,10 +3877,12 @@ int layout design_navigation_menu 0x7f0b002c
 int layout design_navigation_menu_item 0x7f0b002d
 int layout design_text_input_end_icon 0x7f0b002e
 int layout design_text_input_start_icon 0x7f0b002f
+int layout dialog_add_expense 0x7f0b0074
 int layout dialog_add_transaction 0x7f0b0030
 int layout dialog_transaction 0x7f0b0031
 int layout ime_base_split_test_activity 0x7f0b0032
 int layout ime_secondary_split_test_activity 0x7f0b0033
+int layout item_expense 0x7f0b0075
 int layout item_transaction 0x7f0b0034
 int layout m3_alert_dialog 0x7f0b0035
 int layout m3_alert_dialog_actions 0x7f0b0036

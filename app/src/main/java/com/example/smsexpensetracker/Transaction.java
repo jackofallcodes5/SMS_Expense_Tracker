@@ -10,13 +10,24 @@ public class Transaction {
     private String party;
     private String reference;
     private String smsId;
-    private long   smsDate;    // epoch milliseconds — used for sorting
+    private long   smsDate;
+
+    // New field - linked expense category
+    private int expenseId = -1;
+
 
     public Transaction() {}
 
-    public Transaction(String datetime, double amount, String type,
-                       String description, String party,
-                       String reference, String smsId, long smsDate) {
+
+    public Transaction(String datetime,
+                       double amount,
+                       String type,
+                       String description,
+                       String party,
+                       String reference,
+                       String smsId,
+                       long smsDate) {
+
         this.datetime    = datetime;
         this.amount      = amount;
         this.type        = type;
@@ -25,38 +36,122 @@ public class Transaction {
         this.reference   = reference;
         this.smsId       = smsId;
         this.smsDate     = smsDate;
+        this.expenseId   = -1;
     }
 
-    public int    getId()                          { return id; }
-    public void   setId(int id)                    { this.id = id; }
 
-    public String getDatetime()                    { return datetime; }
-    public void   setDatetime(String v)            { this.datetime = v; }
+    // -------------------------------------------------------
+    // Basic Transaction Fields
+    // -------------------------------------------------------
 
-    public double getAmount()                      { return amount; }
-    public void   setAmount(double v)              { this.amount = v; }
+    public int getId() {
+        return id;
+    }
 
-    public String getType()                        { return type; }
-    public void   setType(String v)                { this.type = v; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getDescription()                 { return description; }
-    public void   setDescription(String v)         { this.description = v; }
 
-    public String getParty()                       { return party; }
-    public void   setParty(String v)               { this.party = v; }
+    public String getDatetime() {
+        return datetime;
+    }
 
-    public String getReference()                   { return reference; }
-    public void   setReference(String v)           { this.reference = v; }
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
 
-    public String getSmsId()                       { return smsId; }
-    public void   setSmsId(String v)               { this.smsId = v; }
 
-    public long   getSmsDate()                     { return smsDate; }
-    public void   setSmsDate(long v)               { this.smsDate = v; }
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    public String getParty() {
+        return party;
+    }
+
+    public void setParty(String party) {
+        this.party = party;
+    }
+
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+
+    public String getSmsId() {
+        return smsId;
+    }
+
+    public void setSmsId(String smsId) {
+        this.smsId = smsId;
+    }
+
+
+    public long getSmsDate() {
+        return smsDate;
+    }
+
+    public void setSmsDate(long smsDate) {
+        this.smsDate = smsDate;
+    }
+
+
+    // -------------------------------------------------------
+    // Expense Category
+    // -------------------------------------------------------
+
+    /**
+     * Returns assigned expense category ID.
+     * -1 means not assigned yet.
+     */
+    public int getExpenseId() {
+        return expenseId;
+    }
+
+
+    public void setExpenseId(int expenseId) {
+        this.expenseId = expenseId;
+    }
+
 
     @Override
     public String toString() {
-        return "Transaction{id=" + id + ", datetime='" + datetime
-                + "', amount=" + amount + ", type='" + type + "'}";
+
+        return "Transaction{" +
+                "id=" + id +
+                ", datetime='" + datetime + '\'' +
+                ", amount=" + amount +
+                ", type='" + type + '\'' +
+                ", expenseId=" + expenseId +
+                '}';
     }
 }

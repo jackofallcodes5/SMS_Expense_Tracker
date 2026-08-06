@@ -2,8 +2,6 @@
 <!--
     dialog_transaction.xml
     Transaction detail popup dialog layout.
-    Fields: Date-Time, Amount, Type, Party, Reference, Description (editable)
-    Actions: Save | Close
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +21,6 @@
         android:textColor="#1565C0"
         android:paddingBottom="12dp" />
 
-    <!-- Divider -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -38,14 +35,15 @@
         android:textSize="11sp"
         android:textColor="#78909C"
         android:textAllCaps="true"
-        android:letterSpacing="0.05" />
+        android:letterSpacing="0.05"/>
+
     <TextView
         android:id="@+id/tvDialogDatetime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="#263238"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"/>
 
     <!-- Amount -->
     <TextView
@@ -55,7 +53,8 @@
         android:textSize="11sp"
         android:textColor="#78909C"
         android:textAllCaps="true"
-        android:letterSpacing="0.05" />
+        android:letterSpacing="0.05"/>
+
     <TextView
         android:id="@+id/tvDialogAmount"
         android:layout_width="match_parent"
@@ -63,7 +62,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#263238"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"/>
 
     <!-- Type -->
     <TextView
@@ -73,16 +72,17 @@
         android:textSize="11sp"
         android:textColor="#78909C"
         android:textAllCaps="true"
-        android:letterSpacing="0.05" />
+        android:letterSpacing="0.05"/>
+
     <TextView
         android:id="@+id/tvDialogType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"/>
 
-    <!-- Party / Sender / Receiver -->
+    <!-- Party -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -90,16 +90,17 @@
         android:textSize="11sp"
         android:textColor="#78909C"
         android:textAllCaps="true"
-        android:letterSpacing="0.05" />
+        android:letterSpacing="0.05"/>
+
     <TextView
         android:id="@+id/tvDialogParty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:textColor="#263238"
-        android:paddingBottom="10dp" />
+        android:paddingBottom="10dp"/>
 
-    <!-- Reference Number -->
+    <!-- Reference -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,7 +108,8 @@
         android:textSize="11sp"
         android:textColor="#78909C"
         android:textAllCaps="true"
-        android:letterSpacing="0.05" />
+        android:letterSpacing="0.05"/>
+
     <TextView
         android:id="@+id/tvDialogReference"
         android:layout_width="match_parent"
@@ -115,16 +117,15 @@
         android:textSize="13sp"
         android:fontFamily="monospace"
         android:textColor="#455A64"
-        android:paddingBottom="12dp" />
+        android:paddingBottom="12dp"/>
 
-    <!-- Divider before editable section -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#E0E0E0"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Description (Editable) -->
+    <!-- Description -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,7 +133,8 @@
         android:textSize="11sp"
         android:textColor="#78909C"
         android:textAllCaps="true"
-        android:letterSpacing="0.05" />
+        android:letterSpacing="0.05"/>
+
     <EditText
         android:id="@+id/etDialogDescription"
         android:layout_width="match_parent"
@@ -145,16 +147,35 @@
         android:inputType="textMultiLine|textCapSentences"
         android:hint="Enter a description..."
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="12dp"/>
 
-    <!-- Action Buttons Row -->
+    <!-- Expense Category -->
+    <TextView
+        android:id="@+id/tvExpenseLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expense Category"
+        android:textSize="11sp"
+        android:textColor="#78909C"
+        android:textAllCaps="true"
+        android:letterSpacing="0.05"
+        android:visibility="gone"/>
+
+    <Spinner
+        android:id="@+id/spinnerExpense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"/>
+
+    <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="end">
 
-        <!-- Close (dismiss without saving) -->
         <Button
             android:id="@+id/btnClose"
             style="@style/Widget.AppCompat.Button.Borderless"
@@ -162,16 +183,15 @@
             android:layout_height="wrap_content"
             android:text="Close"
             android:textColor="#546E7A"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"/>
 
-        <!-- Save description -->
         <Button
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"
             android:backgroundTint="@color/colorPrimary"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"/>
 
     </LinearLayout>
 

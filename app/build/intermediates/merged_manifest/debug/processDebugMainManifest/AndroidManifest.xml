@@ -78,6 +78,9 @@
             android:value="ca-app-pub-4195105056058261~4846325772" />
 
         <activity
+            android:name="com.example.smsexpensetracker.ExpenseActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.smsexpensetracker.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" >

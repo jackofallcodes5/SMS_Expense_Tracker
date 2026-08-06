@@ -12,47 +12,85 @@
     <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="80dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="match_parent"
             android:background="@color/colorPrimary"
+            android:gravity="bottom"
             app:title="SMS Expense Tracker"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="#FFFFFF"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+
+    <!-- Tab Buttons Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="80dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="6dp"
+        android:elevation="4dp">
+
+        <Button
+            android:id="@+id/btnTransactions"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Transactions"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/colorPrimary"/>
+
+        <Button
+            android:id="@+id/btnExpenses"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Expenses"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#1565C0"
+            android:backgroundTint="#E3F2FD"/>
+
+    </LinearLayout>
+
 
     <!-- Main content -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="598dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Summary bar -->
         <TextView
             android:id="@+id/tvSummary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
+            android:fontFamily="monospace"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:paddingTop="4dp"
+            android:paddingEnd="16dp"
             android:paddingBottom="10dp"
             android:textColor="#FFFFFF"
             android:textSize="13sp"
-            android:fontFamily="monospace"
             tools:text="0 Transactions  |  + Rs.0  |  - Rs.0" />
 
-        <!-- Column headers -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:orientation="horizontal"
             android:background="#1565C0"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingStart="12dp"
             android:paddingEnd="12dp">
 
@@ -87,23 +125,21 @@
 
         </LinearLayout>
 
-        <!-- Content frame -->
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <!-- RecyclerView — extra bottom padding for banner + FABs -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="230dp"
                 tools:itemCount="8"
                 tools:listitem="@layout/item_transaction" />
 
-            <!-- Empty state -->
+
             <LinearLayout
                 android:id="@+id/tvEmptyState"
                 android:layout_width="match_parent"
@@ -120,40 +156,27 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="Tap reload to scan SMS or + to add manually."
-                    android:textColor="#78909C"
-                    android:textSize="14sp" />
-
             </LinearLayout>
 
-            <!-- Loading overlay -->
+
             <LinearLayout
                 android:id="@+id/progressBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#80FFFFFF"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <ProgressBar
                     android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:indeterminateTint="@color/colorPrimary" />
+                    android:layout_height="56dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Scanning SMS messages..."
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="15sp" />
+                    android:textColor="@color/colorPrimary" />
 
             </LinearLayout>
 
@@ -161,21 +184,17 @@
 
     </LinearLayout>
 
-    <!-- =====================================================
-         AdMob Banner — anchored to very bottom of screen
-    ====================================================== -->
+
+    <!-- Banner -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="#FFFFFF"
+        android:background="#00FFFFFF"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-4195105056058261/4225843823"/>
 
-    <!-- =====================================================
-         FAB Stack — sits above the banner
-    ====================================================== -->
 
     <!-- Reload FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -188,9 +207,10 @@
         android:contentDescription="Reload SMS"
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@android:drawable/stat_notify_sync"
-        app:tint="#FFFFFF" />
+        app:tint="#FFFFFF"/>
 
-    <!-- Add Transaction FAB -->
+
+    <!-- Add FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddTransaction"
         android:layout_width="wrap_content"
@@ -201,6 +221,7 @@
         android:contentDescription="Add Transaction"
         app:backgroundTint="@color/colorAccent"
         app:srcCompat="@android:drawable/ic_input_add"
-        app:tint="#FFFFFF" />
+        app:tint="#FFFFFF"/>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

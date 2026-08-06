@@ -1,13 +1,17 @@
 package com.example.smsexpensetracker;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +36,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnTransactions;
+    private Button btnExpenses;
 
     private static final String TAG               = "MainActivity";
     private static final int    REQUEST_PERMISSIONS = 101;
@@ -82,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         bindViews();
         setupRecyclerView();
+        setupTabButtons();
         initAdMob();
 
         // Request READ_SMS + RECEIVE_SMS together
@@ -307,6 +315,8 @@ public class MainActivity extends AppCompatActivity {
         fabRescan         = findViewById(R.id.fabRescan);
         fabAddTransaction = findViewById(R.id.fabAddTransaction);
         adView            = findViewById(R.id.adView);
+        btnTransactions   = findViewById(R.id.btnTransactions);
+        btnExpenses       = findViewById(R.id.btnExpenses);
     }
 
     // -------------------------------------------------------
@@ -322,9 +332,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // -------------------------------------------------------
-    // Background SMS import using ExecutorService + Handler
-    // Replaces the deprecated AsyncTask pattern.
+    // TAB NAVIGATION
     // -------------------------------------------------------
+
+    private void setupTabButtons() {
+        if (btnTransactions == null || btnExpenses == null) return;
+
+        btnTransactions.setOnClickListener(v -> {
+            // Show transaction list
+            recyclerView.setVisibility(View.VISIBLE);
+
+            btnTransactions.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.parseColor("#1565C0")));
+
+            btnExpenses.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.parseColor("#E3F2FD")));
+        });
+
+        btnExpenses.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
+            startActivity(intent);
+        });
+    }
 
     /**
      * Runs the full SMS inbox scan on a background thread (via ExecutorService),

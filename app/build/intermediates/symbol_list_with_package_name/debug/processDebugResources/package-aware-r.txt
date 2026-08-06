@@ -3282,10 +3282,14 @@ id browser_actions_menu_items
 id browser_actions_menu_view
 id btnAddCancel
 id btnAddSave
+id btnCancelExpense
 id btnClose
+id btnExpenses
 id btnPickDate
 id btnPickTime
 id btnSave
+id btnSaveExpense
+id btnTransactions
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3373,11 +3377,14 @@ id etAddDescription
 id etAmount
 id etDate
 id etDialogDescription
+id etExpenseBudget
+id etExpenseName
 id etParty
 id etTime
 id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
+id fabAddExpense
 id fabAddTransaction
 id fabRescan
 id fade
@@ -3433,6 +3440,7 @@ id jumpToEnd
 id jumpToStart
 id labeled
 id layout
+id layoutEmptyExpense
 id left
 id leftToRight
 id legacy
@@ -3560,6 +3568,7 @@ id position
 id postLayout
 id pressed
 id progressBar
+id progressExpense
 id progress_circular
 id progress_horizontal
 id radio
@@ -3567,6 +3576,7 @@ id ratio
 id rbCredit
 id rbDebit
 id rectangles
+id recyclerExpense
 id recyclerView
 id report_drawn
 id reverseSawtooth
@@ -3617,6 +3627,7 @@ id snapMargins
 id south
 id spacer
 id special_effects_controller_view_tag
+id spinnerExpense
 id spline
 id split_action_bar
 id spread
@@ -3674,6 +3685,7 @@ id titleDividerNoCustom
 id title_template
 id toggle
 id toolbar
+id toolbarExpenses
 id top
 id topPanel
 id touch_outside
@@ -3689,6 +3701,7 @@ id transition_scene_layoutid_cache
 id transition_transform
 id triangle
 id tvAmount
+id tvBudget
 id tvDateTime
 id tvDialogAmount
 id tvDialogDatetime
@@ -3696,7 +3709,13 @@ id tvDialogParty
 id tvDialogReference
 id tvDialogType
 id tvEmptyState
+id tvExpenseLabel
+id tvExpenseName
+id tvRemaining
+id tvSpent
 id tvSummary
+id tvTotalBudget
+id tvTotalSpent
 id tvType
 id unchecked
 id uniform
@@ -3838,6 +3857,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_expenses
 layout activity_main
 layout admob_empty_layout
 layout browser_actions_context_menu_page
@@ -3858,10 +3878,12 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
+layout dialog_add_expense
 layout dialog_add_transaction
 layout dialog_transaction
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
+layout item_expense
 layout item_transaction
 layout m3_alert_dialog
 layout m3_alert_dialog_actions

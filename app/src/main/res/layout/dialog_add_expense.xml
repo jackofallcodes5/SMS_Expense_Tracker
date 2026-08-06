@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="320dp"
+
+    android:layout_height="wrap_content"
+
+    android:orientation="vertical"
+
+    android:background="@drawable/bg_dialog_rounded"
+
+    android:padding="20dp">
+
+
+
+    <!-- Title -->
+
+    <TextView
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:text="Add Expense Category"
+
+        android:textSize="18sp"
+
+        android:textStyle="bold"
+
+        android:textColor="#1565C0"
+
+        android:paddingBottom="16dp"/>
+
+
+
+
+    <!-- Expense Name -->
+
+    <TextView
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="Expense Name"
+
+        android:textSize="11sp"
+
+        android:textColor="#78909C"
+
+        android:textAllCaps="true"/>
+
+
+    <EditText
+
+        android:id="@+id/etExpenseName"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:hint="Example: Food"
+
+        android:inputType="textCapSentences"
+
+        android:layout_marginTop="5dp"
+
+        android:layout_marginBottom="12dp"/>
+
+
+
+
+    <!-- Monthly Budget -->
+
+    <TextView
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="Monthly Budget"
+
+        android:textSize="11sp"
+
+        android:textColor="#78909C"
+
+        android:textAllCaps="true"/>
+
+
+
+    <EditText
+
+        android:id="@+id/etExpenseBudget"
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:hint="Example: 5000"
+
+        android:inputType="numberDecimal"
+
+        android:layout_marginTop="5dp"
+
+        android:layout_marginBottom="20dp"/>
+
+
+
+
+    <!-- Buttons -->
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal"
+
+        android:gravity="end">
+
+
+        <Button
+
+            android:id="@+id/btnCancelExpense"
+
+            style="@style/Widget.AppCompat.Button.Borderless"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="Cancel"
+
+            android:textColor="#546E7A"/>
+
+
+
+        <Button
+
+            android:id="@+id/btnSaveExpense"
+
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+
+            android:text="Save"
+
+            android:textColor="#FFFFFF"
+
+            android:backgroundTint="@color/colorPrimary"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
