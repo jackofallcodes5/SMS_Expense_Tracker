@@ -2,20 +2,31 @@ R_DEF: Internal format may change without notice
 local
 color colorAccent
 color colorBackground
+color colorBackground_Night
+color colorCard_Night
 color colorCredited
 color colorDebited
+color colorDivider_Night
 color colorPrimary
 color colorPrimaryDark
+color colorPrimaryDark_Night
 color colorSurface
+color colorSurface_Night
+color colorTabInactive_Night
 color colorTextPrimary
+color colorTextPrimary_Night
 color colorTextSecondary
+color colorTextSecondary_Night
 drawable bg_dialog_rounded
+drawable ic_delete
 drawable ic_launcher
 id adView
+id appBarLayout
 id btnAddCancel
 id btnAddSave
 id btnCancelExpense
 id btnClose
+id btnDeleteExpense
 id btnExpenses
 id btnPickDate
 id btnPickTime
@@ -34,6 +45,8 @@ id fabAddExpense
 id fabAddTransaction
 id fabRescan
 id layoutEmptyExpense
+id panelExpenses
+id panelTransactions
 id progressBar
 id progressExpense
 id rbCredit
@@ -42,6 +55,7 @@ id recyclerExpense
 id recyclerView
 id rgType
 id spinnerExpense
+id tabBar
 id toolbar
 id toolbarExpenses
 id tvAmount
@@ -83,3 +97,4 @@ string permission_denied
 string scan_complete
 string scanning
 style Theme.SMSExpenseTracker
+style Theme.SMSExpenseTracker.Dark

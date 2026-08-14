@@ -3,7 +3,9 @@ package com.example.smsexpensetracker;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -128,11 +130,33 @@ public class ExpenseActivity extends AppCompatActivity {
         adapter =
                 new ExpenseAdapter(
                         this,
-                        expenseList
+                        expenseList,
+                        this::deleteExpense
                 );
 
 
         recyclerExpense.setAdapter(adapter);
+
+    }
+
+
+
+
+    private void deleteExpense(Expense expense) {
+
+        int rows = db.deleteExpense(expense);
+
+        if (rows > 0) {
+
+            Toast.makeText(this, "Expense deleted", Toast.LENGTH_SHORT).show();
+
+            loadExpenses();
+
+        } else {
+
+            Toast.makeText(this, "Failed to delete expense", Toast.LENGTH_SHORT).show();
+
+        }
 
     }
 
@@ -185,9 +209,6 @@ public class ExpenseActivity extends AppCompatActivity {
         }
 
     }
-
-
-
 
 
     private void updateSummary() {

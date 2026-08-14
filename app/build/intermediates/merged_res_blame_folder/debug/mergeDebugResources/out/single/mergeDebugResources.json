@@ -1,43 +1,47 @@
 [
     {
-        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_activity_main.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-44:/layout/activity_main.xml"
+        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/drawable_ic_launcher.png.flat",
+        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/drawable/ic_launcher.png"
+    },
+    {
+        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_activity_expenses.xml.flat",
+        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/activity_expenses.xml"
+    },
+    {
+        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_dialog_add_expense.xml.flat",
+        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/dialog_add_expense.xml"
+    },
+    {
+        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/drawable-night_bg_dialog_rounded.xml.flat",
+        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/drawable-night/bg_dialog_rounded.xml"
+    },
+    {
+        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_item_transaction.xml.flat",
+        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/item_transaction.xml"
+    },
+    {
+        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/drawable_ic_delete.xml.flat",
+        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/drawable/ic_delete.xml"
     },
     {
         "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/drawable_bg_dialog_rounded.xml.flat",
         "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/drawable/bg_dialog_rounded.xml"
     },
     {
+        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_item_expense.xml.flat",
+        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/item_expense.xml"
+    },
+    {
         "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_dialog_transaction.xml.flat",
         "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/dialog_transaction.xml"
-    },
-    {
-        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/drawable_ic_launcher.png.flat",
-        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/drawable/ic_launcher.png"
-    },
-    {
-        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_dialog_transaction.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-44:/layout/dialog_transaction.xml"
     },
     {
         "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_dialog_add_transaction.xml.flat",
         "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/dialog_add_transaction.xml"
     },
     {
-        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_dialog_add_expense.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-44:/layout/dialog_add_expense.xml"
-    },
-    {
-        "merged": "com.example.smsexpensetracker.app-debug-42:/layout_activity_expenses.xml.flat",
-        "source": "com.example.smsexpensetracker.app-main-44:/layout/activity_expenses.xml"
-    },
-    {
         "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_activity_main.xml.flat",
         "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/activity_main.xml"
-    },
-    {
-        "merged": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-debug-42:/layout_item_transaction.xml.flat",
-        "source": "/home/gaurang/.gradle/daemon/8.9/com.example.smsexpensetracker.app-main-44:/layout/item_transaction.xml"
     },
     {
         "merged": "com.example.smsexpensetracker.app-debug-42:/layout_item_expense.xml.flat",

@@ -2,13 +2,21 @@
 <resources>
     <color name="colorAccent">#FF6F00</color>
     <color name="colorBackground">#F0F4F8</color>
+    <color name="colorBackground_Night">#0F1923</color>
+    <color name="colorCard_Night">#1E2D40</color>
     <color name="colorCredited">#2E7D32</color>
     <color name="colorDebited">#C62828</color>
+    <color name="colorDivider_Night">#2A3A50</color>
     <color name="colorPrimary">#1565C0</color>
     <color name="colorPrimaryDark">#0D47A1</color>
+    <color name="colorPrimaryDark_Night">#1E88E5</color>
     <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurface_Night">#1A2535</color>
+    <color name="colorTabInactive_Night">#162030</color>
     <color name="colorTextPrimary">#263238</color>
+    <color name="colorTextPrimary_Night">#E8F0FE</color>
     <color name="colorTextSecondary">#546E7A</color>
+    <color name="colorTextSecondary_Night">#7B97B4</color>
     <string name="app_name">SMS Expense Tracker</string>
     <string name="btn_close">Close</string>
     <string name="btn_save">Save</string>
@@ -23,10 +31,30 @@
     <string name="permission_denied">SMS permission denied. Cannot read bank transactions.</string>
     <string name="scan_complete">transactions imported!</string>
     <string name="scanning">Scanning SMS messages...</string>
-    <style name="Theme.SMSExpenseTracker" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.SMSExpenseTracker" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">#F0F4F8</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/colorBackground</item>
+
+        
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+
+        
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+    <style name="Theme.SMSExpenseTracker.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDark_Night</item>
+        <item name="colorPrimaryDark">#0D47A1</item>
+        <item name="colorAccent">#FF8F00</item>
+        <item name="android:windowBackground">@color/colorBackground_Night</item>
+        <item name="android:statusBarColor">@color/colorBackground_Night</item>
+        <item name="android:navigationBarColor">@color/colorBackground_Night</item>
+        <item name="colorControlNormal">@color/colorPrimaryDark_Night</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark_Night</item>
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 </resources>

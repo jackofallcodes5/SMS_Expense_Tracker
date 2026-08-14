@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,16 +15,28 @@ import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder> {
 
+    public interface OnExpenseDeleteListener {
+        void onDelete(Expense expense);
+    }
 
     private final Context context;
     private List<Expense> expenseList;
+    private final OnExpenseDeleteListener deleteListener;
 
+
+    public ExpenseAdapter(Context context,
+                          List<Expense> expenseList,
+                          OnExpenseDeleteListener deleteListener) {
+
+        this.context = context;
+        this.expenseList = expenseList;
+        this.deleteListener = deleteListener;
+    }
 
     public ExpenseAdapter(Context context,
                           List<Expense> expenseList) {
 
-        this.context = context;
-        this.expenseList = expenseList;
+        this(context, expenseList, null);
     }
 
 
@@ -112,6 +125,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             );
         }
 
+        if (holder.btnDelete != null) {
+            holder.btnDelete.setOnClickListener(v -> {
+                if (deleteListener != null) {
+                    deleteListener.onDelete(expense);
+                }
+            });
+        }
     }
 
 
@@ -135,6 +155,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         TextView tvSpent;
         TextView tvRemaining;
         ProgressBar progressBar;
+        ImageView btnDelete;
 
 
 
@@ -157,6 +178,9 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
             progressBar =
                     itemView.findViewById(R.id.progressExpense);
+
+            btnDelete =
+                    itemView.findViewById(R.id.btnDeleteExpense);
         }
     }
 }

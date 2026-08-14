@@ -746,33 +746,150 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int expenseId,
             double amount){
 
-
-
-        SQLiteDatabase db =
-                getWritableDatabase();
-
-
+        SQLiteDatabase db = getWritableDatabase();
 
         db.execSQL(
-                "UPDATE "
-                        + TABLE_EXPENSES
-                        +
-                        " SET "
-                        + EXP_SPENT
-                        +
-                        " = "
-                        + EXP_SPENT
-                        +
-                        " + ? WHERE "
-                        + EXP_ID
-                        +
-                        "=?",
-                new Object[]{
-                        amount,
-                        expenseId
-                }
+                "UPDATE " + TABLE_EXPENSES +
+                " SET " + EXP_SPENT +
+                " = " + EXP_SPENT +
+                " + ? WHERE " + EXP_ID + "=?",
+                new Object[]{ amount, expenseId }
+        );
+    }
+
+
+// ==========================================
+// SUBTRACT SPENT AMOUNT WHEN TRANSACTION REMOVED
+// ==========================================
+
+
+    public void subtractExpenseSpent(
+            int expenseId,
+            double amount){
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.execSQL(
+                "UPDATE " + TABLE_EXPENSES +
+                " SET " + EXP_SPENT +
+                " = MAX(0, " + EXP_SPENT +
+                " - ?) WHERE " + EXP_ID + "=?",
+                new Object[]{ amount, expenseId }
+        );
+    }
+
+
+// ==========================================
+// GET CURRENT EXPENSE_ID FOR A TRANSACTION
+// ==========================================
+
+
+    /** Returns the expense_id currently linked to the given transaction, or -1 if none. */
+    public int getExpenseIdForTransaction(int transactionId){
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor c = db.query(
+                TABLE_TRANSACTIONS,
+                new String[]{ COL_EXPENSE_ID },
+                COL_ID + "=?",
+                new String[]{ String.valueOf(transactionId) },
+                null, null, null
         );
 
+        int expenseId = -1;
+
+        if(c != null){
+            if(c.moveToFirst()){
+                expenseId = c.getInt(0);
+            }
+            c.close();
+        }
+
+        return expenseId;
+    }
+
+
+// ==========================================
+// CLEAR EXPENSE LINK FROM A TRANSACTION
+// ==========================================
+
+
+    /** Sets expense_id = -1 for the given transaction (unlinks it). */
+    public void clearTransactionExpense(int transactionId){
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COL_EXPENSE_ID, -1);
+
+        db.update(
+                TABLE_TRANSACTIONS,
+                cv,
+                COL_ID + "=?",
+                new String[]{ String.valueOf(transactionId) }
+        );
+    }
+
+
+// ==========================================
+// DELETE EXPENSE
+// ==========================================
+
+
+    /** Deletes expense record and unlinks any transactions linked to it. */
+    public int deleteExpense(Expense expense) {
+        if (expense == null) return 0;
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(COL_EXPENSE_ID, -1);
+
+            int expenseId = expense.getId();
+
+            if (expenseId > 0) {
+                db.update(
+                        TABLE_TRANSACTIONS,
+                        cv,
+                        COL_EXPENSE_ID + "=?",
+                        new String[]{ String.valueOf(expenseId) }
+                );
+            }
+
+            int rows = 0;
+            if (expenseId > 0) {
+                rows = db.delete(
+                        TABLE_EXPENSES,
+                        EXP_ID + "=?",
+                        new String[]{ String.valueOf(expenseId) }
+                );
+            }
+
+            // Fallback to name match if id match didn't delete any rows
+            if (rows == 0 && expense.getName() != null) {
+                rows = db.delete(
+                        TABLE_EXPENSES,
+                        EXP_NAME + "=?",
+                        new String[]{ expense.getName() }
+                );
+            }
+
+            db.setTransactionSuccessful();
+            return rows;
+
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+
+    public int deleteExpense(int expenseId) {
+        Expense e = new Expense();
+        e.setId(expenseId);
+        return deleteExpense(e);
     }
 
 }

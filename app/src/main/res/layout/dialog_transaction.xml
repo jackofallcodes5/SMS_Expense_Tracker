@@ -18,13 +18,13 @@
         android:text="Transaction Details"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#1565C0"
+        android:textColor="@color/colorPrimary"
         android:paddingBottom="12dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E0E0E0"
+        android:background="?android:attr/listDivider"
         android:layout_marginBottom="12dp"/>
 
     <!-- Date Time -->
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:text="Date / Time"
         android:textSize="11sp"
-        android:textColor="#78909C"
+        android:textColor="?android:attr/textColorSecondary"
         android:textAllCaps="true"
         android:letterSpacing="0.05"/>
 
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="#263238"
+        android:textColor="?android:attr/textColorPrimary"
         android:paddingBottom="10dp"/>
 
     <!-- Amount -->
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:text="Amount"
         android:textSize="11sp"
-        android:textColor="#78909C"
+        android:textColor="?android:attr/textColorSecondary"
         android:textAllCaps="true"
         android:letterSpacing="0.05"/>
 
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="#263238"
+        android:textColor="?android:attr/textColorPrimary"
         android:paddingBottom="10dp"/>
 
     <!-- Type -->
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:text="Transaction Type"
         android:textSize="11sp"
-        android:textColor="#78909C"
+        android:textColor="?android:attr/textColorSecondary"
         android:textAllCaps="true"
         android:letterSpacing="0.05"/>
 
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:text="Party (VPA / Merchant)"
         android:textSize="11sp"
-        android:textColor="#78909C"
+        android:textColor="?android:attr/textColorSecondary"
         android:textAllCaps="true"
         android:letterSpacing="0.05"/>
 
@@ -97,7 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="#263238"
+        android:textColor="?android:attr/textColorPrimary"
         android:paddingBottom="10dp"/>
 
     <!-- Reference -->
@@ -106,7 +106,7 @@
         android:layout_height="wrap_content"
         android:text="Reference / UTR"
         android:textSize="11sp"
-        android:textColor="#78909C"
+        android:textColor="?android:attr/textColorSecondary"
         android:textAllCaps="true"
         android:letterSpacing="0.05"/>
 
@@ -116,13 +116,13 @@
         android:layout_height="wrap_content"
         android:textSize="13sp"
         android:fontFamily="monospace"
-        android:textColor="#455A64"
+        android:textColor="?android:attr/textColorSecondary"
         android:paddingBottom="12dp"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E0E0E0"
+        android:background="?android:attr/listDivider"
         android:layout_marginBottom="12dp"/>
 
     <!-- Description -->
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:text="Description (editable)"
         android:textSize="11sp"
-        android:textColor="#78909C"
+        android:textColor="?android:attr/textColorSecondary"
         android:textAllCaps="true"
         android:letterSpacing="0.05"/>
 
@@ -142,10 +142,11 @@
         android:minLines="2"
         android:maxLines="4"
         android:textSize="14sp"
-        android:textColor="#263238"
-        android:backgroundTint="#1565C0"
+        android:textColor="?android:attr/textColorPrimary"
+        android:backgroundTint="@color/colorPrimary"
         android:inputType="textMultiLine|textCapSentences"
         android:hint="Enter a description..."
+        android:textColorHint="?android:attr/textColorSecondary"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="12dp"/>
 
@@ -156,7 +157,7 @@
         android:layout_height="wrap_content"
         android:text="Expense Category"
         android:textSize="11sp"
-        android:textColor="#78909C"
+        android:textColor="?android:attr/textColorSecondary"
         android:textAllCaps="true"
         android:letterSpacing="0.05"
         android:visibility="gone"/>
@@ -182,7 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Close"
-            android:textColor="#546E7A"
+            android:textColor="?android:attr/textColorSecondary"
             android:layout_marginEnd="8dp"/>
 
         <Button

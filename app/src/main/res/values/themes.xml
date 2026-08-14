@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.SMSExpenseTracker" parent="Theme.AppCompat.Light.NoActionBar">
+
+    <!-- ============================================================
+         LIGHT THEME  (default)
+         ============================================================ -->
+    <style name="Theme.SMSExpenseTracker" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">#F0F4F8</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/colorBackground</item>
+
+        <!-- Material EditText underline color -->
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+
+        <!-- Smooth window transitions -->
+        <item name="android:windowActivityTransitions">true</item>
     </style>
+
+
+    <!-- ============================================================
+         DARK THEME  (auto-applied when system is in dark mode)
+         ============================================================ -->
+    <style name="Theme.SMSExpenseTracker.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDark_Night</item>
+        <item name="colorPrimaryDark">#0D47A1</item>
+        <item name="colorAccent">#FF8F00</item>
+        <item name="android:windowBackground">@color/colorBackground_Night</item>
+        <item name="android:statusBarColor">@color/colorBackground_Night</item>
+        <item name="android:navigationBarColor">@color/colorBackground_Night</item>
+        <item name="colorControlNormal">@color/colorPrimaryDark_Night</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark_Night</item>
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
 </resources>

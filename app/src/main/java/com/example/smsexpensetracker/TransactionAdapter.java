@@ -2,6 +2,7 @@ package com.example.smsexpensetracker;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,11 +90,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // --- Row click listener ---
         holder.itemView.setOnClickListener(v -> clickListener.onItemClick(t));
 
-        // Alternate row background for readability
+        // Alternate row background — theme-aware so dark mode works correctly
+        TypedValue tv = new TypedValue();
         if (position % 2 == 0) {
-            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            context.getTheme().resolveAttribute(android.R.attr.windowBackground, tv, true);
+            holder.itemView.setBackgroundColor(tv.data);
         } else {
-            holder.itemView.setBackgroundColor(Color.parseColor("#F5F5F5"));
+            // Slightly offset shade: blend windowBackground with a touch of primary
+            context.getTheme().resolveAttribute(android.R.attr.colorBackground, tv, true);
+            holder.itemView.setBackgroundColor(tv.data);
         }
     }
 

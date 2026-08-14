@@ -1,354 +1,201 @@
-# 📱 SMS Expense Tracker
+# 📱 SMS Expense Tracker & Budget Manager
 
-A personal finance **Android app** (100% Java + XML) that **automatically reads your bank SMS messages** and turns them into a clean, organized expense tracker — no manual entry needed.
-
----
-
-## 📌 What Does This App Do?
-
-Every time your bank sends you an SMS like:
-
-> *"Your a/c no. XX0046 debited for Rs.34.00 on 17-03-2026 19:17:24 trf to bharatpe@upi (RefNo 120174243512) - DNS Bank"*
-
-This app:
-1. **Reads** that SMS automatically (from inbox + in real-time)
-2. **Extracts** the amount, date, type (credit/debit), and party
-3. **Saves** it to a local SQLite database on your phone
-4. **Displays** it in a clean list — latest transaction on top
-
-You can also **add cash transactions manually** using the ➕ button.
+An intelligent, privacy-first **Android Application** written in 100% Native Java and XML that **automatically transforms bank SMS notifications into an organized financial dashboard**, tracking spending habits, monthly category budgets, and net cash flow in real-time — completely offline without third-party server dependence.
 
 ---
 
-## 🛠️ Tech Stack
+## ⚡ Quick Download
 
-| Technology | What It Is | Why We Used It |
-|------------|-----------|----------------|
-| **Java** | Programming language | 100% native Android — no Kotlin, no Flutter/Dart |
-| **XML Layouts** | UI design files | Defines how every screen looks |
-| **Android Studio** | Development IDE | Official IDE for building Android apps |
-| **SQLite** | Local database | Stores all transactions on the phone — no internet needed |
-| **RecyclerView** | UI component | Shows transactions in a smooth scrollable list |
-| **ContentResolver** | Android API | Used to read SMS messages from the phone |
-| **BroadcastReceiver** | Android component | Listens for incoming SMS in real time |
-| **Regex** | Pattern matching | Extracts amount, date, party from SMS text |
-| **ExecutorService + Handler** | Background threading | Scans SMS without freezing the UI (replaces deprecated AsyncTask) |
-| **SharedPreferences** | Small data storage | Remembers if the full SMS scan has been done |
-| **Google AdMob** | Ad network | Banner ad at the bottom of the screen |
+Download and install the compiled Android application directly onto your physical Android device:
+
+👉 **[⬇️ 1-Click Download Debug APK](file:///home/gaurang/Resume/SMS_Expense_Tracker/app/build/outputs/apk/debug/app-debug.apk)** 👈
 
 ---
 
-## 📂 Project Structure
+## 📌 Executive Summary & Problem Solved
+
+Managing personal finances often fails due to the friction of manual transaction entry. Modern users receive dozens of SMS notifications daily from banks and UPI apps (GPay, PhonePe, Paytm). **SMS Expense Tracker** eliminates manual data entry by running an on-device regex parsing engine over incoming and historical bank SMS messages. It extracts financial amounts, transaction types (credit vs. debit), merchant parties, and reference numbers, storing them securely in an on-device SQLite database.
+
+---
+
+## 🔄 System Architecture & Data Pipeline
+
+```mermaid
+graph TD
+    A[Incoming SMS / Inbox] -->|ContentResolver / BroadcastReceiver| B[SMSReader]
+    B --> C[SMSParser - Regex Engine]
+    C -->|Extract Amount, Type, Date, Party, Ref| D{Is Valid Transaction?}
+    D -->|No| E[Ignore SMS]
+    D -->|Yes| F[DatabaseHelper - SQLite Insert]
+    F -->|UNIQUE sms_id Constraint| G[transactions Table]
+    G --> H[MainActivity Controller]
+    H --> I[Transaction Panel - RecyclerView]
+    H --> J[Expenses Panel - Budget Tracker]
+    J --> K[1-Tap Delete & Transaction Unlinking]
+```
+
+---
+
+## 🛠️ Complete Tech Stack & Architecture
+
+| Layer | Technology / API | Purpose & Technical Highlight |
+|-------|------------------|-------------------------------|
+| **Language** | Native Java (JDK 17) | Core application architecture, OOP, memory management |
+| **UI Design** | Android XML & Material Components | MaterialCardView, CoordinatorLayout, Custom Vector Drawables |
+| **Database** | SQLite (`SQLiteOpenHelper`) | Relational database with automatic migration & transactional unlinking |
+| **Concurrency** | `ExecutorService` & `Handler` | Asynchronous background SMS parsing without UI thread blocking |
+| **OS Integration** | `ContentResolver` & `BroadcastReceiver` | Real-time SMS interception (`RECEIVE_SMS`) and inbox reading (`READ_SMS`) |
+| **Parsing Engine** | Java Regular Expressions (`java.util.regex`) | Dynamic pattern extraction for multi-bank transaction SMS formats |
+| **Monetization** | Google AdMob SDK v23.6.0 | Responsive banner ad integration managed with activity lifecycle |
+
+---
+
+## 🌟 Key Features & Capabilities
+
+### 1. 🤖 Automatic Bank SMS Parsing
+- **Historical Inbox Import**: Scans phone SMS inbox on initial launch using background worker threads.
+- **Real-Time SMS Interception**: Automatically intercepts incoming SMS notifications via `SMSReceiver` broadcast receiver.
+- **Multi-Bank Regex Patterns**: Supports major Indian banks (DNS Bank, HDFC, SBI, ICICI, Axis, Kotak) and UPI platforms (GPay, PhonePe, Paytm, BHIM).
+
+### 2. 📊 Budget & Category Management
+- **Custom Expense Categories**: Define monthly budgets for categories like *Food*, *Rent*, *Shopping*, *Utilities*.
+- **Spent vs. Budget Metrics**: Calculates spending percentage, remaining budget balance, and dynamic color-coded progress bars (Green for safe, Red when budget exceeded).
+
+### 3. 🗑️ 1-Tap Category Deletion & Unlinking
+- **Instant Deletion**: Delete expense categories with a single tap on the trash icon (`btnDeleteExpense`).
+- **Data Integrity**: Automatically resets linked transactions to uncategorized (`COL_EXPENSE_ID = -1`) and dynamically updates summary header totals (`tvTotalBudget` and `tvTotalSpent`).
+- **Resilient Fallback**: Deletes records by Primary Key ID with automatic fallback to name matching.
+
+### 4. ➕ Manual Cash Transaction Logging
+- Add offline/cash expenses using an intuitive modal dialog (`AddTransactionDialog`) featuring native DatePicker & TimePicker support.
+
+### 5. 🔒 100% Offline Privacy Guarantee
+- All financial data is stored locally in SQLite (`sms_expenses.db`). Zero user data is uploaded to cloud servers or remote APIs.
+
+---
+
+## 📂 Comprehensive Project Directory Structure
 
 ```
 SMSExpenseTracker/
-│
 ├── app/
+│   ├── build.gradle                             → Dependencies & SDK versions (Compile SDK 35, Min SDK 21)
 │   └── src/main/
-│       │
+│       ├── AndroidManifest.xml                  → Permissions (READ_SMS, RECEIVE_SMS, INTERNET) & Receivers
 │       ├── java/com/example/smsexpensetracker/
-│       │   ├── MainActivity.java          → Main screen — controls everything
-│       │   ├── Transaction.java           → Data model (blueprint for one transaction)
-│       │   ├── DatabaseHelper.java        → All SQLite operations (save, read, update)
-│       │   ├── SMSReader.java             → Reads SMS inbox from the phone
-│       │   ├── SMSParser.java             → Extracts data from SMS text using Regex
-│       │   ├── TransactionAdapter.java    → Connects data to the RecyclerView list
-│       │   ├── TransactionDialog.java     → Popup shown when you tap a transaction
-│       │   └── AddTransactionDialog.java  → Popup for manually adding a cash transaction
-│       │
-│       ├── res/
-│       │   ├── layout/
-│       │   │   ├── activity_main.xml          → Main screen layout
-│       │   │   ├── item_transaction.xml       → Single row in the transaction list
-│       │   │   ├── dialog_transaction.xml     → Transaction detail popup layout
-│       │   │   └── dialog_add_transaction.xml → Add cash transaction popup layout
-│       │   │
-│       │   ├── values/
-│       │   │   ├── colors.xml    → App color definitions
-│       │   │   ├── strings.xml   → All text used in the app
-│       │   │   └── themes.xml    → App theme and style
-│       │   │
-│       │   └── drawable/
-│       │       ├── bg_dialog_rounded.xml → Rounded white background for popups
-│       │       └── ic_launcher.png       → App icon
-│       │
-│       └── AndroidManifest.xml   → App permissions and component configuration
-│
-├── app/build.gradle        → App-level dependencies and build config
-├── build.gradle            → Project-level Gradle config
-├── settings.gradle         → Project name and module inclusion
-├── gradle.properties       → JVM and AndroidX settings
-├── gradlew / gradlew.bat   → Gradle wrapper scripts
-└── README.md               → This file
+│       │   ├── MainActivity.java                → Tab container activity & main controller
+│       │   ├── ExpenseActivity.java             → Standalone Expense category activity
+│       │   ├── Transaction.java                 → Model representing single debit/credit transaction
+│       │   ├── Expense.java                     → Model representing monthly budget category
+│       │   ├── DatabaseHelper.java              → SQLite helper managing transactions & expenses tables
+│       │   ├── SMSReader.java                   → Service querying ContentResolver content://sms/inbox
+│       │   ├── SMSParser.java                   → Regex engine extracting structured financial data
+│       │   ├── SMSReceiver.java                 → BroadcastReceiver catching real-time incoming SMS
+│       │   ├── TransactionAdapter.java          → RecyclerView adapter rendering transaction rows
+│       │   ├── ExpenseAdapter.java              → RecyclerView adapter with 1-tap delete listener
+│       │   ├── TransactionDialog.java           → Detail & category assignment dialog
+│       │   ├── AddTransactionDialog.java        → Dialog for manual transaction logging
+│       │   └── AddExpenseDialog.java            → Dialog for creating new monthly budget categories
+│       └── res/
+│           ├── drawable/
+│           │   ├── ic_delete.xml                → Red trash icon vector asset
+│           │   └── bg_dialog_rounded.xml        → Rounded white background shape for dialogs
+│           ├── layout/
+│           │   ├── activity_main.xml            → Main screen layout with transaction & expense panels
+│           │   ├── activity_expenses.xml        → Expenses overview layout
+│           │   ├── item_transaction.xml         → Layout for individual transaction item
+│           │   ├── item_expense.xml             → Layout for expense card with delete button
+│           │   ├── dialog_transaction.xml       → Layout for transaction detail dialog
+│           │   ├── dialog_add_transaction.xml   → Layout for adding cash transactions
+│           │   └── dialog_add_expense.xml       → Layout for adding expense budgets
+│           └── values/
+│               ├── colors.xml                   → Primary, Accent, and status color tokens
+│               ├── strings.xml                  → App string resources
+│               └── themes.xml                   → Material design themes
+├── build.gradle                                 → Project-level build script
+├── gradle.properties                            → JVM args & AndroidX settings
+├── gradlew / gradlew.bat                        → Executable Gradle wrapper scripts
+└── README.md                                    → Comprehensive project documentation
 ```
 
 ---
 
-## 🔄 How The App Works — Step By Step
+## 🗄️ Database Architecture & Schema
 
-### First Time You Open The App
+The application utilizes an SQLite database named `sms_expenses.db` (Version 3) containing two relational tables:
 
-```
-App Opens
-    ↓
-Ask for SMS Permission (READ_SMS + RECEIVE_SMS)
-    ↓
-Permission Granted?
-    ├── YES → Scan entire SMS inbox in background thread
-    └── NO  → Show empty screen (can grant later via Settings)
-            ↓
-    Read all SMS from inbox (content://sms/inbox)
-            ↓
-    For each SMS — is it a bank SMS? (keyword check)
-    ├── NO  → Skip it
-    └── YES → Extract details using Regex
-                    ↓
-            Amount found AND type found?
-            ├── NO  → Skip
-            └── YES → Save to SQLite database
-                            ↓
-                    Show in list (latest on top)
-```
+### Table 1: `transactions`
+| Column Name | Data Type | Constraint | Purpose |
+|-------------|-----------|------------|---------|
+| `id` | `INTEGER` | `PRIMARY KEY AUTOINCREMENT` | Unique transaction ID |
+| `datetime` | `TEXT` | `NOT NULL` | Formatted date string (`dd-MM-yyyy HH:mm:ss`) |
+| `amount` | `REAL` | `NOT NULL` | Monetary value in INR (₹) |
+| `type` | `TEXT` | `NOT NULL` | `"Credited"` or `"Debited"` |
+| `description` | `TEXT` | `NULLABLE` | User note or transaction memo |
+| `party` | `TEXT` | `NULLABLE` | Sender / merchant name (e.g. `bharatpe@upi`) |
+| `reference` | `TEXT` | `NULLABLE` | Bank UTR / Reference number |
+| `sms_id` | `TEXT` | `UNIQUE` | Original SMS message ID (prevents duplicate entries) |
+| `sms_date` | `INTEGER` | `DEFAULT 0` | Unix epoch timestamp used for sorting |
+| `expense_id` | `INTEGER` | `DEFAULT -1` | Foreign Key linking to `expenses.id` (-1 = unassigned) |
 
-### Every Time After That
+### Table 2: `expenses`
+| Column Name | Data Type | Constraint | Purpose |
+|-------------|-----------|------------|---------|
+| `id` | `INTEGER` | `PRIMARY KEY AUTOINCREMENT` | Unique expense category ID |
+| `name` | `TEXT` | `UNIQUE` | Category title (e.g., "Food", "Rent") |
+| `monthly_budget` | `REAL` | `NOT NULL` | Target monthly allocation (₹) |
+| `spent_amount` | `REAL` | `DEFAULT 0` | Cumulative spent amount for category (₹) |
+| `created_date` | `TEXT` | `NOT NULL` | Date category was established |
 
-```
-App Opens
-    ↓
-Load transactions from SQLite database instantly
-    ↓
-Show in RecyclerView list
-    ↓
-SMSReceiver catches any new SMS that arrive in real time
-```
+---
 
-### When You Tap the Reload Button (🔄)
+## 🧠 Regex Extraction Engine Rules
 
-```
-Tap Reload FAB
-    ↓
-Re-scan SMS inbox in background thread
-    ↓
-Only NEW SMS are added (duplicates automatically skipped via UNIQUE constraint)
-    ↓
-List refreshes
-```
+```java
+// Amount Pattern Matching
+Pattern amountPattern = Pattern.compile("(?:Rs|INR|₹)\\.?\\s*([\\d,]+\\.\\d{2}|[\\d,]+)", Pattern.CASE_INSENSITIVE);
 
-### When You Tap the ➕ Button
+// Merchant / VPA Pattern Matching
+Pattern partyPattern = Pattern.compile("(?:to|at|info)\\s+([a-zA-Z0-9.\\-_]+@[a-zA-Z0-9]+)", Pattern.CASE_INSENSITIVE);
 
-```
-Tap Add FAB
-    ↓
-Popup opens
-    ↓
-Fill in: Date, Time, Credit/Debit, Amount, Party, Description
-    ↓
-Tap Add
-    ↓
-Saved to SQLite database
-    ↓
-Appears at top of list
-```
-
-### When You Tap a Transaction Row
-
-```
-Tap any row
-    ↓
-Popup shows full details:
-  • Date & Time
-  • Amount
-  • Type (Credited / Debited)
-  • Party (who sent/received)
-  • Reference number / UTR
-  • Description (editable)
-    ↓
-Edit description → Tap Save
-    ↓
-Updated in SQLite instantly
+// Bank Reference Number Pattern
+Pattern refPattern = Pattern.compile("(?:RefNo|Ref|UTR|Txn)\\s*[:#-]?\\s*([0-9]{8,16})", Pattern.CASE_INSENSITIVE);
 ```
 
 ---
 
-## 🧠 How SMS Parsing Works
+## ⚙️ How to Build from Source
 
-The app uses **Regex (Regular Expressions)** to find patterns in text.
+### Prerequisites
+- **Android Studio** (Hedgehog 2023.1.1 or newer recommended)
+- **Java Development Kit (JDK 17)**
+- **Android SDK Platform 35**
+- Physical Android phone running **Android 5.0 (API 21)** or higher (SMS permissions are restricted on emulators).
 
-### Example SMS:
-```
-Your a/c no. XX0046 debited for Rs.34.00 on 17-03-2026 19:17:24
-trf to bharatpe.9q0p0e0k0c835361@unit (RefNo 120174243512). DNS Bank
-```
-
-### What Gets Extracted:
-
-| Field | Extracted Value | Pattern Used |
-|-------|----------------|--------------|
-| Amount | 34.00 | `Rs\.?\s*([\d,]+\.?\d*)` |
-| Type | Debited | Word "debited" detected |
-| Date-Time | 17-03-2026 19:17:24 | `dd-MM-yyyy HH:mm:ss` |
-| Party | bharatpe.9q...@unit | VPA pattern `\w+@\w+` |
-| Reference | 120174243512 | Number after "RefNo" |
-
-### Supported Banks & Payment Apps
-
-| Bank / App | Supported |
-|-----------|-----------|
-| DNS Bank | ✅ |
-| HDFC Bank | ✅ |
-| SBI | ✅ |
-| ICICI Bank | ✅ |
-| Axis Bank | ✅ |
-| Kotak Bank | ✅ |
-| GPay | ✅ |
-| PhonePe | ✅ |
-| Paytm | ✅ |
-| BHIM UPI | ✅ |
-| Most Indian banks | ✅ |
+### Steps
+1. Clone or download repository into your workspace directory.
+2. Open Android Studio and select **File → Open → SMS_Expense_Tracker**.
+3. Allow Gradle to sync dependencies automatically.
+4. Connect your Android device via USB with **USB Debugging** enabled.
+5. Execute the build command from terminal:
+   ```bash
+   chmod +x gradlew
+   ./gradlew assembleDebug
+   ```
+6. The debug APK will be generated at:
+   `app/build/outputs/apk/debug/app-debug.apk`
 
 ---
 
-## 🗄️ Database Schema
+## ❓ Frequently Asked Questions & Troubleshooting
 
-Single SQLite table: **`transactions`**
-
-| Column | Type | What It Stores |
-|--------|------|----------------|
-| `id` | INTEGER PK | Auto-generated unique ID |
-| `datetime` | TEXT | Date and time of transaction |
-| `amount` | REAL | Transaction amount (Rs.) |
-| `type` | TEXT | `"Credited"` or `"Debited"` |
-| `description` | TEXT | User-editable note |
-| `party` | TEXT | Who sent/received the money |
-| `reference` | TEXT | Bank reference / UTR number |
-| `sms_id` | TEXT UNIQUE | Original SMS ID — prevents duplicates |
-| `sms_date` | INTEGER | SMS epoch timestamp — used for sorting |
-
-> **Duplicate Prevention:** `sms_id` has a `UNIQUE` constraint. If the same SMS is scanned twice, the database automatically ignores the second insert via `CONFLICT_IGNORE`.
+| Issue | Root Cause | Solution |
+|-------|------------|----------|
+| **No transactions visible on first launch** | SMS permissions not granted | Grant SMS permissions in phone **Settings → Apps → SMS Expense Tracker → Permissions**. |
+| **Duplicate transactions showing** | Non-unique SMS IDs | Database automatically enforces `UNIQUE(sms_id)`. Tap 🔄 Reload to refresh SQLite cache. |
+| **Category delete button not responding** | Focus interception in RecyclerView | Fixed in latest build by declaring `btnDeleteExpense` as `ImageView` with `focusable="false"`. |
+| **Play Protect Warning when installing APK** | Sideloaded debug build signature | Tap **More details → Install anyway**. This is standard behavior for sideloaded development APKs. |
 
 ---
 
-## 📱 App Screens
-
-### Main Screen
-- Blue toolbar with app name
-- Summary bar: total transactions | total credited | total debited
-- Column headers: Date/Time | Amount | Type
-- Scrollable RecyclerView list
-  - 🟢 **Green** = Credited (money received)
-  - 🔴 **Red** = Debited (money spent)
-- 🔄 **Reload FAB** (blue) — re-scans SMS inbox
-- ➕ **Add FAB** (orange) — manually add a cash transaction
-- AdMob banner at the very bottom
-
-### Transaction Detail Popup
-- Full transaction details (read-only)
-- Editable description field
-- **Save** and **Close** buttons
-
-### Add Transaction Popup
-- Date picker (with calendar dialog)
-- Time picker (24-hour)
-- Credit / Debit radio buttons
-- Amount field
-- Party / Person field (optional)
-- Description field (optional)
-- **Add** and **Cancel** buttons
-
----
-
-## 🔐 Permissions
-
-| Permission | Why Needed |
-|-----------|-----------|
-| `READ_SMS` | Read bank SMS messages from the inbox |
-| `RECEIVE_SMS` | Listen for new incoming SMS in real time |
-| `INTERNET` | Required by AdMob SDK to fetch ads |
-| `ACCESS_NETWORK_STATE` | Required by AdMob SDK |
-
-> **Privacy:** All data stays **on your phone**. No data is sent to any server. The app works fully offline (except for AdMob ads).
-
----
-
-## 💰 AdMob Integration
-
-- Banner ad anchored at the bottom of the main screen
-- **App ID:** `ca-app-pub-4195105056058261~4846325772`
-- **Ad Unit ID:** `ca-app-pub-4195105056058261/4225843823`
-- Ad lifecycle properly managed (`pause` / `resume` / `destroy` with Activity)
-
----
-
-## ⚙️ Setup Instructions
-
-### Requirements
-- Android Studio Hedgehog (2023.1.1) or newer
-- JDK 17 (bundled with Android Studio)
-- Android device running Android 5.0 (API 21) or above
-- Physical device recommended — SMS inbox is not available on the emulator
-
-### Steps to Run
-1. Open **Android Studio**
-2. **File → Open** → select the `SMSExpenseTracker` folder
-3. Wait for Gradle sync to complete
-4. Connect your Android phone via USB with **USB Debugging** enabled
-5. Click **Run ▶**
-6. Grant SMS permission when prompted
-7. App automatically scans your SMS inbox on first launch
-
-### Building a Debug APK
-1. **Build → Build Bundle(s)/APK(s) → Build APK(s)**
-2. APK is saved at: `app/build/outputs/apk/debug/app-debug.apk`
-3. Share via WhatsApp or Google Drive
-4. On the recipient's device: enable **Install from Unknown Sources**, then install
-5. Recipients may see a Play Protect warning — tap **Install Anyway**
-
----
-
-## 🐛 Common Issues & Fixes
-
-| Problem | Fix |
-|---------|-----|
-| App crashes on open | Grant SMS permission in phone **Settings → Apps → SMS Expense Tracker → Permissions** |
-| No transactions showing | Tap the 🔄 reload button |
-| Wrong / incomplete transactions showing | Only bank SMS are parsed — check `SMSParser.java` keywords |
-| Banner ad not showing | New AdMob accounts take 24–48 hours to activate |
-| `"App not installed"` error | Uninstall old version first, then reinstall |
-| Play Protect warning | Tap **More details → Install Anyway** — normal for sideloaded APKs |
-| Gradle sync fails | Check internet connection; invalidate caches (**File → Invalidate Caches**) |
-
----
-
-## 📊 Example Output
-
-Once running with real data you might see:
-
-```
-899 Transactions  |  + Rs.115387  |  - Rs.97226
-```
-
-This means:
-- **899** bank transactions found and saved
-- **₹1,15,387** total money credited (received)
-- **₹97,226** total money debited (spent)
-
----
-
-## 🏗️ Build Info
-
-| Property | Value |
-|----------|-------|
-| Language | Java (100%) |
-| Database | SQLite (on-device, no cloud) |
-| UI | Material Design Components (XML) |
-| Min Android | 5.0 (API 21) |
-| Target Android | 15 (API 35) |
-| Compile SDK | 35 |
-| Version | 2.0 (versionCode 2) |
-| AGP | 8.7.3 |
-| AdMob SDK | 23.6.0 |
-| Background Threading | `ExecutorService` + `Handler` (no deprecated `AsyncTask`) |
-
----
-
-*Built for personal finance tracking. All data stored locally on device. No cloud, no login, no subscription.*
+*Developed with Native Java, SQLite, and Material Components. 100% offline, privacy-first personal finance management.*

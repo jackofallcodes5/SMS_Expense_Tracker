@@ -6,142 +6,347 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F4F8"
+    android:background="?android:attr/windowBackground"
     tools:context=".MainActivity">
 
-    <!-- App Bar -->
+    <!-- ===================== -->
+    <!--       APP BAR         -->
+    <!-- ===================== -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
             android:gravity="bottom"
+            android:layout_height="84dp"
+            android:background="@color/colorPrimary"
+            android:paddingStart="4dp"
             app:title="SMS Expense Tracker"
             app:titleTextColor="#FFFFFF"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
+        <!-- Tab Buttons — always visible below toolbar -->
+        <LinearLayout
+            android:id="@+id/tabBar"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="?attr/colorSurface"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:elevation="4dp">
+
+            <Button
+                android:id="@+id/btnTransactions"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Transactions"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="@color/colorPrimary"
+                app:cornerRadius="10dp"/>
+
+            <Button
+                android:id="@+id/btnExpenses"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="Expenses"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02"
+                android:textColor="@color/colorPrimary"
+                android:backgroundTint="#E3F2FD"
+                app:cornerRadius="10dp"/>
+
+        </LinearLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <!-- Tab Buttons Section -->
-    <LinearLayout
+    <!-- ============================== -->
+    <!--   ROOT CONTENT (below AppBar)  -->
+    <!-- ============================== -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="80dp"
-        android:orientation="horizontal"
-        android:background="#FFFFFF"
-        android:padding="6dp"
-        android:elevation="4dp">
-
-        <Button
-            android:id="@+id/btnTransactions"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Transactions"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="@color/colorPrimary"/>
-
-        <Button
-            android:id="@+id/btnExpenses"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Expenses"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#1565C0"
-            android:backgroundTint="#E3F2FD"/>
-
-    </LinearLayout>
-
-
-    <!-- Main content -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="598dp"
-        android:layout_marginTop="50dp"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/tvSummary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:fontFamily="monospace"
-            android:paddingStart="16dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="10dp"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp"
-            tools:text="0 Transactions  |  + Rs.0  |  - Rs.0" />
-
-
+        <!-- ===================== -->
+        <!-- PANEL A: TRANSACTIONS -->
+        <!-- ===================== -->
         <LinearLayout
+            android:id="@+id/panelTransactions"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="#1565C0"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
 
+            <!-- Summary Bar -->
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/tvSummary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Date / Time"
-                android:textColor="#E3F2FD"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:background="@color/colorPrimary"
+                android:fontFamily="monospace"
+                android:paddingStart="16dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textColor="#DDEEFF"
+                android:textSize="12.5sp"
+                tools:text="0 Transactions  |  + Rs.0  |  - Rs.0"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.2"
-                android:gravity="end"
-                android:text="Amount"
-                android:textColor="#E3F2FD"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+            <!-- Column Header Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#0D47A1"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:text="Type"
-                android:textColor="#E3F2FD"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Date / Time"
+                    android:textColor="#BBDEFB"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.04"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:gravity="end"
+                    android:text="Amount"
+                    android:textColor="#BBDEFB"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.04"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="Type"
+                    android:textColor="#BBDEFB"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.04"/>
+
+            </LinearLayout>
+
+            <!-- Transaction List / States -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="80dp"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/item_transaction"/>
+
+                <!-- Empty State -->
+                <LinearLayout
+                    android:id="@+id/tvEmptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No transactions yet"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tap ⟳ to scan SMS messages"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="13sp"
+                        android:layout_marginTop="4dp"/>
+
+                </LinearLayout>
+
+                <!-- Progress / Scanning State -->
+                <LinearLayout
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Scanning SMS messages..."
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
 
 
-        <FrameLayout
+        <!-- =================== -->
+        <!-- PANEL B: EXPENSES   -->
+        <!-- =================== -->
+        <LinearLayout
+            android:id="@+id/panelExpenses"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:visibility="gone">
 
+            <!-- Monthly Summary Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="0dp"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@color/colorPrimary">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="THIS MONTH"
+                        android:textColor="#90CAF9"
+                        android:textSize="11sp"
+                        android:letterSpacing="0.08"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Budget"
+                                android:textColor="#90CAF9"
+                                android:textSize="11sp"/>
+
+                            <TextView
+                                android:id="@+id/tvTotalBudget"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₹0"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:textColor="#FFFFFF"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="end">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Total Spent"
+                                android:textColor="#FFCC80"
+                                android:textSize="11sp"/>
+
+                            <TextView
+                                android:id="@+id/tvTotalSpent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₹0"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:textColor="#FF8A65"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Section Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expense Categories"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="?android:attr/textColorPrimary"
+                android:letterSpacing="0.02"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="2dp"/>
+
+            <!-- Expense List -->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/recyclerExpense"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:clipToPadding="false"
-                tools:itemCount="8"
-                tools:listitem="@layout/item_transaction" />
+                android:paddingBottom="80dp"/>
 
-
+            <!-- Empty State -->
             <LinearLayout
-                android:id="@+id/tvEmptyState"
+                android:id="@+id/layoutEmptyExpense"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -151,77 +356,77 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="No transactions found"
-                    android:textColor="#546E7A"
+                    android:text="No expense categories"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/progressBar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <ProgressBar
-                    android:layout_width="56dp"
-                    android:layout_height="56dp" />
+                    android:textStyle="bold"
+                    android:textColor="?android:attr/textColorSecondary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Scanning SMS messages..."
-                    android:textColor="@color/colorPrimary" />
+                    android:text="Tap + to create your first budget"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"/>
 
             </LinearLayout>
 
-        </FrameLayout>
+        </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
 
-    <!-- Banner -->
+    <!-- ===================== -->
+    <!--    BANNER AD          -->
+    <!-- ===================== -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom|center_horizontal"
-        android:background="#00FFFFFF"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-4195105056058261/4225843823"/>
 
 
-    <!-- Reload FAB -->
+    <!-- Reload FAB (Transactions tab) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabRescan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="155dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="130dp"
         android:contentDescription="Reload SMS"
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@android:drawable/stat_notify_sync"
-        app:tint="#FFFFFF"/>
+        app:tint="#FFFFFF"
+        app:fabSize="mini"/>
 
-
-    <!-- Add FAB -->
+    <!-- Add Transaction FAB (Transactions tab) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddTransaction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="85dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="70dp"
         android:contentDescription="Add Transaction"
         app:backgroundTint="@color/colorAccent"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="#FFFFFF"/>
 
+    <!-- Add Expense FAB (Expenses tab, hidden by default) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="70dp"
+        android:contentDescription="Add Expense"
+        android:visibility="gone"
+        app:backgroundTint="@color/colorAccent"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="#FFFFFF"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

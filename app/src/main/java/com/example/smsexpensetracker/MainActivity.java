@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME          = "sms_tracker_prefs";
     private static final String PREF_FIRST_LAUNCH   = "first_launch_done";
 
+    // ----- Transaction panel views -----
     private RecyclerView         recyclerView;
     private TransactionAdapter   adapter;
     private LinearLayout         layoutProgress;
@@ -52,13 +54,29 @@ public class MainActivity extends AppCompatActivity {
     private TextView             tvSummary;
     private FloatingActionButton fabRescan;
     private FloatingActionButton fabAddTransaction;
-    private AdView               adView;
 
+    // ----- Expense panel views -----
+    private RecyclerView         recyclerExpense;
+    private ExpenseAdapter       expenseAdapter;
+    private LinearLayout         layoutEmptyExpense;
+    private TextView             tvTotalBudget;
+    private TextView             tvTotalSpent;
+    private FloatingActionButton fabAddExpense;
+
+    // ----- Panel containers -----
+    private LinearLayout panelTransactions;
+    private LinearLayout panelExpenses;
+
+    // ----- Ad -----
+    private AdView adView;
+
+    // ----- Data -----
     private DatabaseHelper    dbHelper;
     private List<Transaction> transactionList = new ArrayList<>();
+    private List<Expense>     expenseList     = new ArrayList<>();
 
     /** Single-thread pool for SMS import tasks — avoids deprecated AsyncTask. */
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor    = Executors.newSingleThreadExecutor();
     /** Posts results back to the main (UI) thread. */
     private final Handler         mainHandler = new Handler(Looper.getMainLooper());
 
@@ -88,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
 
         bindViews();
-        setupRecyclerView();
+        setupTransactionRecycler();
+        setupExpenseRecycler();
         setupTabButtons();
         initAdMob();
 
@@ -106,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             );
         }
 
-        // Reload FAB — manually re-scans inbox for missed SMS
+        // Reload FAB — manually re-scans inbox
         if (fabRescan != null) {
             fabRescan.setOnClickListener(v -> {
                 if (hasAllPermissions()) {
@@ -132,8 +151,22 @@ public class MainActivity extends AppCompatActivity {
                         dbHelper,
                         () -> {
                             loadFromDatabase();
-                            Toast.makeText(this, "Transaction added!",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Transaction added!", Toast.LENGTH_SHORT).show();
+                        }
+                );
+                dialog.show();
+            });
+        }
+
+        // Add Expense FAB
+        if (fabAddExpense != null) {
+            fabAddExpense.setOnClickListener(v -> {
+                AddExpenseDialog dialog = new AddExpenseDialog(
+                        this,
+                        dbHelper,
+                        () -> {
+                            loadExpenses();
+                            Toast.makeText(this, "Expense category added!", Toast.LENGTH_SHORT).show();
                         }
                 );
                 dialog.show();
@@ -143,17 +176,16 @@ public class MainActivity extends AppCompatActivity {
 
     // -------------------------------------------------------
     // onResume — refresh list every time app comes to foreground
-    // This picks up any transactions saved by SMSReceiver
-    // while the app was in the background or closed
     // -------------------------------------------------------
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Always reload from DB on resume —
-        // SMSReceiver may have saved new transactions while app was closed
         if (dbHelper != null && adapter != null) {
             loadFromDatabase();
+        }
+        if (dbHelper != null && expenseAdapter != null) {
+            loadExpenses();
         }
         if (adView != null) adView.resume();
     }
@@ -180,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         if (adView != null) adView.destroy();
-        executor.shutdownNow();   // clean up thread pool
+        executor.shutdownNow();
         super.onDestroy();
     }
 
@@ -202,12 +234,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (readSmsGranted) {
-                Toast.makeText(this, "Permission granted. Scanning...",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permission granted. Scanning...", Toast.LENGTH_SHORT).show();
                 handleFirstLaunch();
             } else {
-                Toast.makeText(this, "SMS permission denied.",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "SMS permission denied.", Toast.LENGTH_LONG).show();
                 loadFromDatabase();
             }
         }
@@ -215,19 +245,15 @@ public class MainActivity extends AppCompatActivity {
 
     // -------------------------------------------------------
     // First launch — full SMS scan only once
-    // After that, SMSReceiver handles everything in real time
     // -------------------------------------------------------
 
     private void handleFirstLaunch() {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean done = prefs.getBoolean(PREF_FIRST_LAUNCH, false);
         if (!done) {
-            // First install — scan full inbox to import history
             prefs.edit().putBoolean(PREF_FIRST_LAUNCH, true).apply();
             importSMSInBackground();
         } else {
-            // All subsequent launches — just load from DB instantly
-            // New SMS are already saved by SMSReceiver in background
             loadFromDatabase();
         }
     }
@@ -236,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
     // RecyclerView setup
     // -------------------------------------------------------
 
-    private void setupRecyclerView() {
+    private void setupTransactionRecycler() {
         if (recyclerView == null) return;
 
         adapter = new TransactionAdapter(this, transactionList, transaction -> {
@@ -247,8 +273,8 @@ public class MainActivity extends AppCompatActivity {
                         dbHelper,
                         () -> {
                             loadFromDatabase();
-                            Toast.makeText(this, "Description updated.",
-                                    Toast.LENGTH_SHORT).show();
+                            loadExpenses();   // refresh expense totals after assignment change
+                            Toast.makeText(this, "Transaction updated.", Toast.LENGTH_SHORT).show();
                         }
                 );
                 dialog.show();
@@ -263,8 +289,28 @@ public class MainActivity extends AppCompatActivity {
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
+    private void setupExpenseRecycler() {
+        if (recyclerExpense == null) return;
+
+        expenseAdapter = new ExpenseAdapter(this, expenseList, this::deleteExpense);
+        recyclerExpense.setLayoutManager(new LinearLayoutManager(this));
+        recyclerExpense.setAdapter(expenseAdapter);
+    }
+
+    private void deleteExpense(Expense expense) {
+        if (expense == null) return;
+        int rows = dbHelper.deleteExpense(expense);
+        if (rows > 0) {
+            Toast.makeText(this, "Expense deleted", Toast.LENGTH_SHORT).show();
+            loadExpenses();
+            loadFromDatabase();
+        } else {
+            Toast.makeText(this, "Failed to delete expense", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     // -------------------------------------------------------
-    // Load data from SQLite into RecyclerView
+    // Load transactions from SQLite
     // -------------------------------------------------------
 
     private void loadFromDatabase() {
@@ -274,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
             transactionList.addAll(list);
             if (adapter != null) adapter.updateData(transactionList);
             updateSummaryBar();
-            updateEmptyState();
+            updateTransactionEmptyState();
         } catch (Exception e) {
             Log.e(TAG, "loadFromDatabase failed: " + e.getMessage(), e);
         }
@@ -292,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
                 transactionList.size(), credit, debit));
     }
 
-    private void updateEmptyState() {
+    private void updateTransactionEmptyState() {
         if (layoutEmpty == null || recyclerView == null) return;
         if (transactionList.isEmpty()) {
             layoutEmpty.setVisibility(View.VISIBLE);
@@ -304,26 +350,79 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // -------------------------------------------------------
+    // Load expenses from SQLite
+    // -------------------------------------------------------
+
+    private void loadExpenses() {
+        try {
+            expenseList.clear();
+            expenseList.addAll(dbHelper.getAllExpenses());
+            if (expenseAdapter != null) expenseAdapter.updateData(expenseList);
+            updateExpenseSummary();
+            updateExpenseEmptyState();
+        } catch (Exception e) {
+            Log.e(TAG, "loadExpenses failed: " + e.getMessage(), e);
+        }
+    }
+
+    private void updateExpenseSummary() {
+        if (tvTotalBudget == null || tvTotalSpent == null) return;
+        double budget = 0, spent = 0;
+        for (Expense ex : expenseList) {
+            budget += ex.getMonthlyBudget();
+            spent  += ex.getSpentAmount();
+        }
+        tvTotalBudget.setText(String.format("Budget : ₹%.0f", budget));
+        tvTotalSpent.setText(String.format("Spent : ₹%.0f", spent));
+    }
+
+    private void updateExpenseEmptyState() {
+        if (layoutEmptyExpense == null || recyclerExpense == null) return;
+        if (expenseList.isEmpty()) {
+            layoutEmptyExpense.setVisibility(View.VISIBLE);
+            recyclerExpense.setVisibility(View.GONE);
+        } else {
+            layoutEmptyExpense.setVisibility(View.GONE);
+            recyclerExpense.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // -------------------------------------------------------
     // View binding
     // -------------------------------------------------------
 
     private void bindViews() {
+        // Panels
+        panelTransactions = findViewById(R.id.panelTransactions);
+        panelExpenses     = findViewById(R.id.panelExpenses);
+
+        // Transaction panel
         recyclerView      = findViewById(R.id.recyclerView);
         layoutProgress    = findViewById(R.id.progressBar);
         layoutEmpty       = findViewById(R.id.tvEmptyState);
         tvSummary         = findViewById(R.id.tvSummary);
         fabRescan         = findViewById(R.id.fabRescan);
         fabAddTransaction = findViewById(R.id.fabAddTransaction);
-        adView            = findViewById(R.id.adView);
-        btnTransactions   = findViewById(R.id.btnTransactions);
-        btnExpenses       = findViewById(R.id.btnExpenses);
+
+        // Expense panel
+        recyclerExpense    = findViewById(R.id.recyclerExpense);
+        layoutEmptyExpense = findViewById(R.id.layoutEmptyExpense);
+        tvTotalBudget      = findViewById(R.id.tvTotalBudget);
+        tvTotalSpent       = findViewById(R.id.tvTotalSpent);
+        fabAddExpense      = findViewById(R.id.fabAddExpense);
+
+        // Tabs
+        btnTransactions = findViewById(R.id.btnTransactions);
+        btnExpenses     = findViewById(R.id.btnExpenses);
+
+        // Ad
+        adView = findViewById(R.id.adView);
     }
 
     // -------------------------------------------------------
     // Permission helpers
     // -------------------------------------------------------
 
-    /** Returns true only if BOTH READ_SMS and RECEIVE_SMS are granted */
     private boolean hasAllPermissions() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
                 == PackageManager.PERMISSION_GRANTED
@@ -338,37 +437,78 @@ public class MainActivity extends AppCompatActivity {
     private void setupTabButtons() {
         if (btnTransactions == null || btnExpenses == null) return;
 
+        // Start on Transactions tab (already visible by default in XML)
+        setActiveTab(true);
+
         btnTransactions.setOnClickListener(v -> {
-            // Show transaction list
-            recyclerView.setVisibility(View.VISIBLE);
-
-            btnTransactions.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.parseColor("#1565C0")));
-
-            btnExpenses.setBackgroundTintList(
-                    ColorStateList.valueOf(Color.parseColor("#E3F2FD")));
+            if (panelTransactions.getVisibility() == View.VISIBLE) return; // already here
+            setActiveTab(true);
         });
 
         btnExpenses.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
-            startActivity(intent);
+            if (panelExpenses.getVisibility() == View.VISIBLE) return; // already here
+            loadExpenses(); // always refresh when switching in
+            setActiveTab(false);
         });
     }
 
     /**
-     * Runs the full SMS inbox scan on a background thread (via ExecutorService),
-     * then posts the result back to the main thread via Handler.
-     * This replaces the deprecated {@link android.os.AsyncTask}.
+     * @param transactionsActive true → show Transactions panel; false → show Expenses panel
      */
+    private void setActiveTab(boolean transactionsActive) {
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
+        int inactiveBgColor = typedValue.data;
+        int activeBgColor = ContextCompat.getColor(this, R.color.colorPrimary);
+
+        if (transactionsActive) {
+            // Show transactions panel
+            panelTransactions.setVisibility(View.VISIBLE);
+            panelExpenses.setVisibility(View.GONE);
+
+            // Show transaction FABs, hide expense FAB
+            if (fabRescan != null)         fabRescan.setVisibility(View.VISIBLE);
+            if (fabAddTransaction != null) fabAddTransaction.setVisibility(View.VISIBLE);
+            if (fabAddExpense != null)     fabAddExpense.setVisibility(View.GONE);
+
+            // Style active/inactive buttons
+            btnTransactions.setBackgroundTintList(ColorStateList.valueOf(activeBgColor));
+            btnTransactions.setTextColor(Color.WHITE);
+
+            btnExpenses.setBackgroundTintList(ColorStateList.valueOf(inactiveBgColor));
+            btnExpenses.setTextColor(activeBgColor);
+
+        } else {
+            // Show expenses panel
+            panelExpenses.setVisibility(View.VISIBLE);
+            panelTransactions.setVisibility(View.GONE);
+
+            // Show expense FAB, hide transaction FABs
+            if (fabAddExpense != null)     fabAddExpense.setVisibility(View.VISIBLE);
+            if (fabRescan != null)         fabRescan.setVisibility(View.GONE);
+            if (fabAddTransaction != null) fabAddTransaction.setVisibility(View.GONE);
+
+            // Style active/inactive buttons
+            btnExpenses.setBackgroundTintList(ColorStateList.valueOf(activeBgColor));
+            btnExpenses.setTextColor(Color.WHITE);
+
+            btnTransactions.setBackgroundTintList(ColorStateList.valueOf(inactiveBgColor));
+            btnTransactions.setTextColor(activeBgColor);
+        }
+    }
+
+    // -------------------------------------------------------
+    // Background SMS import
+    // -------------------------------------------------------
+
     private void importSMSInBackground() {
-        // --- pre-execute: show progress on UI thread ---
+        // Show progress on UI thread
         if (layoutProgress != null)    layoutProgress.setVisibility(View.VISIBLE);
         if (fabRescan != null)         fabRescan.setEnabled(false);
         if (fabAddTransaction != null) fabAddTransaction.setEnabled(false);
         if (layoutEmpty != null)       layoutEmpty.setVisibility(View.GONE);
 
         executor.execute(() -> {
-            // --- background work ---
             int newRows = 0;
             try {
                 List<Transaction> parsed =
@@ -380,7 +520,6 @@ public class MainActivity extends AppCompatActivity {
 
             final int result = newRows;
 
-            // --- post-execute: update UI on main thread ---
             mainHandler.post(() -> {
                 if (layoutProgress != null)    layoutProgress.setVisibility(View.GONE);
                 if (fabRescan != null)         fabRescan.setEnabled(true);
