@@ -172,19 +172,6 @@ Pattern refPattern = Pattern.compile("(?:RefNo|Ref|UTR|Txn)\\s*[:#-]?\\s*([0-9]{
 - **Android SDK Platform 35**
 - Physical Android phone running **Android 5.0 (API 21)** or higher (SMS permissions are restricted on emulators).
 
-### Steps
-1. Clone or download repository into your workspace directory.
-2. Open Android Studio and select **File → Open → SMS_Expense_Tracker**.
-3. Allow Gradle to sync dependencies automatically.
-4. Connect your Android device via USB with **USB Debugging** enabled.
-5. Execute the build command from terminal:
-   ```bash
-   chmod +x gradlew
-   ./gradlew assembleDebug
-   ```
-6. The debug APK will be generated at:
-   `app/build/outputs/apk/debug/app-debug.apk`
-
 ---
 
 ## ❓ Frequently Asked Questions & Troubleshooting
