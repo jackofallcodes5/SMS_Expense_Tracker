@@ -2,7 +2,6 @@
 # Android / Gradle generated output
 # ------------------------------------------------------------------
 build/
-*.apk
 *.aab
 *.aar
 *.ap_
